@@ -15,6 +15,7 @@
 		750BB4C628A52F910001A918 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 750BB4C428A52F910001A918 /* LaunchScreen.storyboard */; };
 		750BB4CF28A5473D0001A918 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750BB4CE28A5473D0001A918 /* NetworkManager.swift */; };
 		756AF4D228A64D3900A4638C /* URLConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756AF4D128A64D3900A4638C /* URLConstants.swift */; };
+		756AF4D428A66B9C00A4638C /* ApiCallModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756AF4D328A66B9C00A4638C /* ApiCallModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		750BB4C728A52F910001A918 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		750BB4CE28A5473D0001A918 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		756AF4D128A64D3900A4638C /* URLConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConstants.swift; sourceTree = "<group>"; };
+		756AF4D328A66B9C00A4638C /* ApiCallModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiCallModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 				750BB4B928A52F8E0001A918 /* AppDelegate.swift */,
 				750BB4BB28A52F8E0001A918 /* SceneDelegate.swift */,
 				750BB4BD28A52F8E0001A918 /* ViewController.swift */,
+				756AF4D328A66B9C00A4638C /* ApiCallModel.swift */,
 				750BB4CD28A52FB10001A918 /* NetworkManager */,
 				750BB4BF28A52F8E0001A918 /* Main.storyboard */,
 				750BB4C228A52F910001A918 /* Assets.xcassets */,
@@ -152,6 +155,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				756AF4D428A66B9C00A4638C /* ApiCallModel.swift in Sources */,
 				750BB4CF28A5473D0001A918 /* NetworkManager.swift in Sources */,
 				756AF4D228A64D3900A4638C /* URLConstants.swift in Sources */,
 				750BB4BE28A52F8E0001A918 /* ViewController.swift in Sources */,
