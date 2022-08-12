@@ -221,9 +221,113 @@ extension Requester:URLSessionDataDelegate {
         }}
 }
 
+
+
+//Video upload
+extension Requester {
+    // Upload image and Video and content
+    func callImageVideoUploadWebservice(mainUrl:String,withHttpType:String,withVideo:URL?,withImage:UIImage,withData:Data,type:String,keyValue:String,withParams:[String:Any],isTokenEnabled:Bool,withCompletionHandler:@escaping CallCompletionDataHandler){
+        print("URL:- \(mainUrl)")
+        print("Params:- \(withParams)")
+        
+        callForCompletiondander = withCompletionHandler
+        let completionURL = mainUrl.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)
+        forTokenEnabled = isTokenEnabled
+        // url validating
+        if let url = URL(string:completionURL!){
+            // UIImagePNGRepresentation(image)
+            getRequest = URLRequest(url: url)
+            getRequest?.httpMethod = withHttpType // GET or POST - Required
+            // Multi part image upload
+            getRequest?.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+            getRequest?.httpShouldHandleCookies = false
+            getRequest?.timeoutInterval = 60
+            let boundary = "------VohpleBoundary4QuqLuM1cE5lMwCy"
+            let contentType = String.init(format: "multipart/form-data; boundary=%@", boundary)
+            getRequest?.setValue(contentType, forHTTPHeaderField: "Content-Type")
+            
+            if type == "image" {
+                if withImage.size.width != 0 {
+                    print("Imageeee---")
+                    if let imageData = withImage.jpegData(compressionQuality: 0.2) {
+                        
+                        getRequest?.httpBody = createVideoBody(with: withParams, boundary: boundary, data: imageData, mimeType: "image/jpg", Filename: "\(UInt8.random)_image.jpg", Key: keyValue)
+                        
+                        var movieData: Data?
+                        do {
+                            movieData = try Data(contentsOf:withVideo!, options: Data.ReadingOptions.alwaysMapped)
+                            getRequest?.httpBody =  createVideoBody(with: withParams, boundary: boundary, data: movieData!, mimeType: "video/mov", Filename: "\(UInt8.random)_upload.mov", Key: keyValue)
+                            // Adding url request in queue then calling start() function based on queue
+                            operationQueueNM?.addOperation(self)
+                        } catch {
+                            movieData = nil
+                            return
+                        }
+                        // Adding url request in queue then calling start() function based on queue
+                        operationQueueNM?.addOperation(self)
+                    }
+                }
+            }
+            else if type == "video"{
+                // if let imageData = withImage.jpegData(compressionQuality: 0.2) {
+                
+                var movieData: Data?
+                do {
+                    movieData = try Data(contentsOf:withVideo!, options: Data.ReadingOptions.alwaysMapped)
+                    getRequest?.httpBody =  createVideoBody(with: withParams, boundary: boundary, data: movieData!, mimeType: "video/mov", Filename: "\(UInt8.random)_upload.mov", Key: keyValue)
+                    // Adding url request in queue then calling start() function based on queue
+                    operationQueueNM?.addOperation(self)
+                } catch {
+                    movieData = nil
+                    return
+                }
+                //}
+            }else{
+                getRequest?.httpBody =  createVideoBody(with: withParams, boundary: boundary, data: Data(), mimeType: "", Filename: "", Key: "")
+                operationQueueNM?.addOperation(self)
+                
+            }
+        }
+    }
+    
+    
+    // Creating param and image are converting to data
+    func createVideoBody(with parameters: [String: Any]?, boundary: String, data:Data, mimeType: String,Filename:String,Key:String)-> Data {
+        var setData = Data()
+        if parameters != nil {
+            print("Parammmmmm")
+            for (key, value) in parameters! {
+                setData.appendString("--\(boundary)\r\n")
+                setData.appendString("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
+                setData.appendString("\(value)\r\n")
+            }
+        }
+        
+        if data != nil {
+            print("Imageeee11111 ---\(Key)")
+            setData.appendString("--\(boundary)\r\n")
+            setData.appendString("Content-Disposition: form-data; name=\"\(Key)\"; filename=\"\(Filename)\"\r\n")
+            setData.appendString("Content-Type: \(mimeType)\r\n\r\n")
+            setData.append(data)
+            setData.appendString("\r\n")
+            
+        }
+        setData.appendString("--".appending(boundary.appending("--\r\n")))
+        return setData
+    }
+}
+
 extension Data {
     mutating func appendString(_ string: String) {
         let data = string.data(using: String.Encoding.utf8, allowLossyConversion: false)
         append(data!)
     }
+}
+
+extension UInt8 {
+  public static var random: UInt8 {
+    var number: UInt8 = 0
+    _ = SecRandomCopyBytes(kSecRandomDefault, 1, &number)
+    return number
+  }
 }
