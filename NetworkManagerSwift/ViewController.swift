@@ -153,9 +153,7 @@ extension ViewController:UIImagePickerControllerDelegate,UINavigationControllerD
     
     
     func uploadMedia() {
-        self.imgV.image = self.selectedThumnailImage
-        print(self.videoPath!)
-        let urlStr = "https://api.cuddloo.com/userPhotoVideo/signup/44"
+        let urlStr = "https://api."
         
         var mediaParams = [[String:Any]]()
         
@@ -164,7 +162,7 @@ extension ViewController:UIImagePickerControllerDelegate,UINavigationControllerD
             ["key":"thumbnail_image[]", "value":self.selectedThumnailImage!,"type":"image/jpg", "fileName":"\(UInt8.random)_image.jpg"]]
         let params:[String:Any] = ["completed_page_no":5]
         
-        UserDefaults.standard.loginToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjQ0LCJpYXQiOjE2NjAzNzEyNzYsImV4cCI6MTY2Mjk2MzI3NiwidHlwZSI6InJlZnJlc2hfdG9rZW4ifQ._k_MVD2Ex_OII2k6jdbJJAreSEsDuf6vhHpI09JMALE"
+        UserDefaults.standard.loginToken = ""
         
         Requester.sharedHelper()?.callImageVideoUpload(mainUrl: urlStr, withHttpType: "POST", mediaParams: mediaParams, withParams: params, isTokenEnabled: true, withCompletionHandler: { resJson, statusR, messageR, statusCode in
             print(resJson)
