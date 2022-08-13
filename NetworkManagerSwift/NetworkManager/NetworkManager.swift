@@ -33,10 +33,10 @@ class Requester: Operation {
     }
     
     func setSession() -> URLSession? {
-        let tokenKey = "Defaults.getAWSIdToken()"
+        let tokenKey = UserDefaults.standard.loginToken
         let sessionConfiguration = URLSessionConfiguration.default
-        if tokenKey.count != 0{
-            sessionConfiguration.httpAdditionalHeaders = ["authorization":tokenKey,"deviceToken":"Defaults.getDeviceToken()"]
+        if let tokenV = tokenKey{
+            sessionConfiguration.httpAdditionalHeaders = ["authorization":"Bareer \(tokenV)"]
         }
         
         // disable the caching
@@ -75,52 +75,6 @@ extension Requester  {
             // Adding url request in queue then calling start() function based on queue
             operationQueueNM?.addOperation(self)
         }
-    }
-    
-    func callImageUploadWebservice(_ url: String, withHttpType: String, withImage: UIImage!, withParams: [String:Any], isTokenEnabled: Bool, withCompletionHandler:@escaping CallCompletionDataHandler) {
-        callForCompletiondander = withCompletionHandler
-        // UploadDataTask = true
-        
-        let completionURL = url.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)
-        
-        forTokenEnabled = isTokenEnabled
-        // url validating
-        if let url = URL(string:completionURL!){
-            let imageData = withImage.jpegData(compressionQuality: 0.5)
-            getRequest = URLRequest(url: url)
-            getRequest?.httpMethod = withHttpType // GET or POST - Required
-            // Multi part image upload
-            getRequest?.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
-            getRequest?.httpShouldHandleCookies = false
-            getRequest?.timeoutInterval = 60
-            let boundary = "------VohpleBoundary4QuqLuM1cE5lMwCy"
-            let contentType = String.init(format: "multipart/form-data; boundary=%@", boundary)
-            getRequest?.setValue(contentType, forHTTPHeaderField: "Content-Type")
-            getRequest?.httpBody =  createBody(withParams, boundary: boundary, data: imageData!, mimeType: "image/jpg")
-            // Adding url request in queue then calling start() function based on queue
-            operationQueueNM?.addOperation(self)
-        }
-    }
-    
-    // Creating param and image are converting to data
-    func createBody(_ parameters: [String: Any]?, boundary: String, data:Data, mimeType: String)-> Data {
-        var setData = Data()
-        if parameters != nil {
-            for (key, value) in parameters! {
-                setData.appendString("--\(boundary)\r\n")
-                setData.appendString("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
-                setData.appendString("\(value)\r\n")
-            }
-        }
-        
-        setData.appendString("--\(boundary)\r\n")
-        setData.appendString("Content-Disposition: form-data; name=\"file\"; filename=\"image.jpg\"\r\n")
-        setData.appendString("Content-Type: image/jpg\r\n\r\n")
-        setData.append(data)
-        setData.appendString("\r\n")
-        
-        setData.appendString("--".appending(boundary.appending("--\r\n")))
-        return setData
     }
     
     //MARK:- Start NSOperation
@@ -221,12 +175,10 @@ extension Requester:URLSessionDataDelegate {
         }}
 }
 
-
-
 //Video upload
 extension Requester {
     // Upload image and Video and content
-    func callImageVideoUploadWebservice(mainUrl:String,withHttpType:String,withVideo:URL?,withImage:UIImage,withData:Data,type:String,keyValue:String,withParams:[String:Any],isTokenEnabled:Bool,withCompletionHandler:@escaping CallCompletionDataHandler){
+    func callImageVideoUpload(mainUrl:String,withHttpType:String,mediaParams:[[String:Any]],withParams:[String:Any],isTokenEnabled:Bool,withCompletionHandler:@escaping CallCompletionDataHandler){
         print("URL:- \(mainUrl)")
         print("Params:- \(withParams)")
         
@@ -246,53 +198,14 @@ extension Requester {
             let contentType = String.init(format: "multipart/form-data; boundary=%@", boundary)
             getRequest?.setValue(contentType, forHTTPHeaderField: "Content-Type")
             
-            if type == "image" {
-                if withImage.size.width != 0 {
-                    print("Imageeee---")
-                    if let imageData = withImage.jpegData(compressionQuality: 0.2) {
-                        
-                        getRequest?.httpBody = createVideoBody(with: withParams, boundary: boundary, data: imageData, mimeType: "image/jpg", Filename: "\(UInt8.random)_image.jpg", Key: keyValue)
-                        
-                        var movieData: Data?
-                        do {
-                            movieData = try Data(contentsOf:withVideo!, options: Data.ReadingOptions.alwaysMapped)
-                            getRequest?.httpBody =  createVideoBody(with: withParams, boundary: boundary, data: movieData!, mimeType: "video/mov", Filename: "\(UInt8.random)_upload.mov", Key: keyValue)
-                            // Adding url request in queue then calling start() function based on queue
-                            operationQueueNM?.addOperation(self)
-                        } catch {
-                            movieData = nil
-                            return
-                        }
-                        // Adding url request in queue then calling start() function based on queue
-                        operationQueueNM?.addOperation(self)
-                    }
-                }
-            }
-            else if type == "video"{
-                // if let imageData = withImage.jpegData(compressionQuality: 0.2) {
-                
-                var movieData: Data?
-                do {
-                    movieData = try Data(contentsOf:withVideo!, options: Data.ReadingOptions.alwaysMapped)
-                    getRequest?.httpBody =  createVideoBody(with: withParams, boundary: boundary, data: movieData!, mimeType: "video/mov", Filename: "\(UInt8.random)_upload.mov", Key: keyValue)
-                    // Adding url request in queue then calling start() function based on queue
-                    operationQueueNM?.addOperation(self)
-                } catch {
-                    movieData = nil
-                    return
-                }
-                //}
-            }else{
-                getRequest?.httpBody =  createVideoBody(with: withParams, boundary: boundary, data: Data(), mimeType: "", Filename: "", Key: "")
-                operationQueueNM?.addOperation(self)
-                
-            }
+            getRequest?.httpBody  = createMediaBody(with: withParams, boundary: boundary, mediaParams)
+            operationQueueNM?.addOperation(self)
         }
     }
     
     
     // Creating param and image are converting to data
-    func createVideoBody(with parameters: [String: Any]?, boundary: String, data:Data, mimeType: String,Filename:String,Key:String)-> Data {
+    func createMediaBody(with parameters: [String: Any]?, boundary: String,_ mediaParam: [[String: Any]])-> Data {
         var setData = Data()
         if parameters != nil {
             print("Parammmmmm")
@@ -303,19 +216,47 @@ extension Requester {
             }
         }
         
-        if data != nil {
-            print("Imageeee11111 ---\(Key)")
-            setData.appendString("--\(boundary)\r\n")
-            setData.appendString("Content-Disposition: form-data; name=\"\(Key)\"; filename=\"\(Filename)\"\r\n")
-            setData.appendString("Content-Type: \(mimeType)\r\n\r\n")
-            setData.append(data)
-            setData.appendString("\r\n")
-            
+        
+        if mediaParam.count != 0 {
+            for (_, paramR) in mediaParam.enumerated() {
+                
+                let mediaKey = paramR["key"] as? String
+                let mediaMimeType = paramR["type"] as? String
+                let mediaFileName = paramR["fileName"] as? String
+                
+                var mediaData: Data?
+                
+                if mediaMimeType == "video/mov" {
+                    let mediaValue = paramR["value"] as? URL
+                    do {
+                        mediaData = try Data(contentsOf:mediaValue!, options: Data.ReadingOptions.alwaysMapped)
+                    } catch {
+                        print("mediaError")
+                    }
+                }
+                else if mediaMimeType == "image/jpg" {
+                    let mediaValue = paramR["value"] as? UIImage
+                    if let imageData = mediaValue?.jpegData(compressionQuality: 0.2) {
+                        mediaData = imageData
+                    }
+                }
+                
+                if let data = mediaData {
+                    setData.appendString("--\(boundary)\r\n")
+                    setData.appendString("Content-Disposition: form-data; name=\"\(mediaKey ?? "")\"; filename=\"\(mediaFileName ?? "")\"\r\n")
+                    setData.appendString("Content-Type: \(mediaMimeType ?? "")\r\n\r\n")
+                    setData.append(data)
+                    setData.appendString("\r\n")
+                }
+            }
         }
+        
         setData.appendString("--".appending(boundary.appending("--\r\n")))
         return setData
     }
 }
+
+
 
 extension Data {
     mutating func appendString(_ string: String) {
@@ -331,3 +272,64 @@ extension UInt8 {
     return number
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+ func callImageUploadWebservice(_ url: String, withHttpType: String, withImage: UIImage!, withParams: [String:Any], isTokenEnabled: Bool, withCompletionHandler:@escaping CallCompletionDataHandler) {
+     callForCompletiondander = withCompletionHandler
+     // UploadDataTask = true
+     
+     let completionURL = url.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed)
+     
+     forTokenEnabled = isTokenEnabled
+     // url validating
+     if let url = URL(string:completionURL!){
+         let imageData = withImage.jpegData(compressionQuality: 0.5)
+         getRequest = URLRequest(url: url)
+         getRequest?.httpMethod = withHttpType // GET or POST - Required
+         // Multi part image upload
+         getRequest?.cachePolicy = .reloadIgnoringLocalAndRemoteCacheData
+         getRequest?.httpShouldHandleCookies = false
+         getRequest?.timeoutInterval = 60
+         let boundary = "------VohpleBoundary4QuqLuM1cE5lMwCy"
+         let contentType = String.init(format: "multipart/form-data; boundary=%@", boundary)
+         getRequest?.setValue(contentType, forHTTPHeaderField: "Content-Type")
+         getRequest?.httpBody =  createBody(withParams, boundary: boundary, data: imageData!, mimeType: "image/jpg")
+         // Adding url request in queue then calling start() function based on queue
+         operationQueueNM?.addOperation(self)
+     }
+ }
+ 
+ // Creating param and image are converting to data
+ func createBody(_ parameters: [String: Any]?, boundary: String, data:Data, mimeType: String)-> Data {
+     var setData = Data()
+     if parameters != nil {
+         for (key, value) in parameters! {
+             setData.appendString("--\(boundary)\r\n")
+             setData.appendString("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
+             setData.appendString("\(value)\r\n")
+         }
+     }
+     
+     setData.appendString("--\(boundary)\r\n")
+     setData.appendString("Content-Disposition: form-data; name=\"file\"; filename=\"image.jpg\"\r\n")
+     setData.appendString("Content-Type: image/jpg\r\n\r\n")
+     setData.append(data)
+     setData.appendString("\r\n")
+     
+     setData.appendString("--".appending(boundary.appending("--\r\n")))
+     return setData
+ }
+ 
+ */

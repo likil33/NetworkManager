@@ -9,7 +9,6 @@ import Foundation
 import UIKit
 
 
-
 struct CountryCodeStruct {
     var body:[CountryCodeDataStruct]
     var httpStatusCode:Int

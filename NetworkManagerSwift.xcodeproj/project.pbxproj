@@ -16,6 +16,7 @@
 		750BB4CF28A5473D0001A918 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750BB4CE28A5473D0001A918 /* NetworkManager.swift */; };
 		756AF4D228A64D3900A4638C /* URLConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756AF4D128A64D3900A4638C /* URLConstants.swift */; };
 		756AF4D428A66B9C00A4638C /* ApiCallModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756AF4D328A66B9C00A4638C /* ApiCallModel.swift */; };
+		7589326428A75CD600A8354C /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7589326328A75CD600A8354C /* UserDefaults+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		750BB4CE28A5473D0001A918 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		756AF4D128A64D3900A4638C /* URLConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConstants.swift; sourceTree = "<group>"; };
 		756AF4D328A66B9C00A4638C /* ApiCallModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiCallModel.swift; sourceTree = "<group>"; };
+		7589326328A75CD600A8354C /* UserDefaults+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,7 +67,8 @@
 				750BB4B928A52F8E0001A918 /* AppDelegate.swift */,
 				750BB4BB28A52F8E0001A918 /* SceneDelegate.swift */,
 				750BB4BD28A52F8E0001A918 /* ViewController.swift */,
-				756AF4D328A66B9C00A4638C /* ApiCallModel.swift */,
+				7589326328A75CD600A8354C /* UserDefaults+Extension.swift */,
+				7589325D28A73F5200A8354C /* Model */,
 				750BB4CD28A52FB10001A918 /* NetworkManager */,
 				750BB4BF28A52F8E0001A918 /* Main.storyboard */,
 				750BB4C228A52F910001A918 /* Assets.xcassets */,
@@ -82,6 +85,14 @@
 				756AF4D128A64D3900A4638C /* URLConstants.swift */,
 			);
 			path = NetworkManager;
+			sourceTree = "<group>";
+		};
+		7589325D28A73F5200A8354C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				756AF4D328A66B9C00A4638C /* ApiCallModel.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -161,6 +172,7 @@
 				750BB4BE28A52F8E0001A918 /* ViewController.swift in Sources */,
 				750BB4BA28A52F8E0001A918 /* AppDelegate.swift in Sources */,
 				750BB4BC28A52F8E0001A918 /* SceneDelegate.swift in Sources */,
+				7589326428A75CD600A8354C /* UserDefaults+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
