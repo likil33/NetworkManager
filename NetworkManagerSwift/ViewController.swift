@@ -26,7 +26,10 @@ class ViewController: UIViewController {
 
     
     @IBAction func cameraBtnAcion(_ sender: UIButton) {
-        self.cameraPopUp(withtitle: "MyCamera",buttonType: "")
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SecondViewController")
+        self.navigationController?.pushViewController(vc, animated: true)
+        
+        //self.cameraPopUp(withtitle: "MyCamera",buttonType: "")
     }
 }
 

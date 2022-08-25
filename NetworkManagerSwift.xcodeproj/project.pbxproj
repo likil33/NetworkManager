@@ -16,6 +16,7 @@
 		750BB4CF28A5473D0001A918 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750BB4CE28A5473D0001A918 /* NetworkManager.swift */; };
 		756AF4D228A64D3900A4638C /* URLConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756AF4D128A64D3900A4638C /* URLConstants.swift */; };
 		756AF4D428A66B9C00A4638C /* ApiCallModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756AF4D328A66B9C00A4638C /* ApiCallModel.swift */; };
+		75867F4C28AAA79E00E30E92 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75867F4B28AAA79E00E30E92 /* SecondViewController.swift */; };
 		7589326428A75CD600A8354C /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7589326328A75CD600A8354C /* UserDefaults+Extension.swift */; };
 /* End PBXBuildFile section */
 
@@ -31,6 +32,7 @@
 		750BB4CE28A5473D0001A918 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		756AF4D128A64D3900A4638C /* URLConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLConstants.swift; sourceTree = "<group>"; };
 		756AF4D328A66B9C00A4638C /* ApiCallModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiCallModel.swift; sourceTree = "<group>"; };
+		75867F4B28AAA79E00E30E92 /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
 		7589326328A75CD600A8354C /* UserDefaults+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -67,6 +69,7 @@
 				750BB4B928A52F8E0001A918 /* AppDelegate.swift */,
 				750BB4BB28A52F8E0001A918 /* SceneDelegate.swift */,
 				750BB4BD28A52F8E0001A918 /* ViewController.swift */,
+				75867F4B28AAA79E00E30E92 /* SecondViewController.swift */,
 				7589326328A75CD600A8354C /* UserDefaults+Extension.swift */,
 				7589325D28A73F5200A8354C /* Model */,
 				750BB4CD28A52FB10001A918 /* NetworkManager */,
@@ -166,6 +169,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75867F4C28AAA79E00E30E92 /* SecondViewController.swift in Sources */,
 				756AF4D428A66B9C00A4638C /* ApiCallModel.swift in Sources */,
 				750BB4CF28A5473D0001A918 /* NetworkManager.swift in Sources */,
 				756AF4D228A64D3900A4638C /* URLConstants.swift in Sources */,
